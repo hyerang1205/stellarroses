@@ -1,0 +1,27 @@
+{
+  "name": "wavenation",
+  "version": "1.0.0",
+  "description": "hackathon project for cmd-f 2021",
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "pg": "^8.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/hyerang1205/stellarroses"
+  },
+  "keywords": [
+    "climate",
+    "change",
+    "cockroach",
+    "db"
+  ],
+  "author": "songrose, stellatranhi, lenakwan, hyerang1205",
+  "license": "ISC"
+}
