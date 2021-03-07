@@ -224,52 +224,5 @@ $(document).ready(function () {
         });
     });
 
-    $("#checkOut").click(() => {
-        let cartDiv = document.getElementById("cartContent");
-
-        for (i = 0; i < shoppingCart.length; i++) {
-            console.log([shoppingCart[i]]);
-            cartDiv.appendChild(document.createElement("tr"));
-            let imageTD = document.createElement("td");
-            imageTD.className = "w-25";
-            let cart_img = document.createElement("IMG");
-            cart_img.src = shoppingCart[i].image;
-            cart_img.className = "img-fluid";
-            imageTD.appendChild(cart_img);
-            let nameTd = document.createElement("td");
-            nameTd.innerHTML = shoppingCart[i].itemName;
-            let priceTd = document.createElement("td");
-            priceTd.innerHTML = calculateDiscount(shoppingCart[i].price, shoppingCart[i].discount);
-            let qtyTd = document.createElement("td");
-            let input = document.createElement("select");
-
-            let quantity = shoppingCart[i].quantity;
-            for (ii = 1; ii <= quantity; ii++) {
-                let option = document.createElement("option");
-                option.innerHTML = ii;
-                input.appendChild(option);
-            }
-            qtyTd.appendChild(input);
-            let categoryTd = document.createElement("td");
-            categoryTd.innerHTML = shoppingCart[i].itemCategory.innerHTML;
-
-            cartDiv.appendChild(imageTD);
-            cartDiv.appendChild(nameTd);
-            cartDiv.appendChild(categoryTd);
-            cartDiv.appendChild(priceTd);
-            cartDiv.appendChild(qtyTd);
-
-        }
-        let total = calculateCartTotal();
-        console.log(total);
-        document.getElementById("cartTotal").innerHTML = total;
-        $('#checkoutModal').modal('toggle');
-
-    })
-
-    $("#submitCart").click(() => {
-        console.log("submit");
-        location.href="./thankyou.html";
-    })
-
+ 
 })
