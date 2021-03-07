@@ -31,7 +31,7 @@ async function addItem(req,res) {
         itemsModel.addItem(body.title, body.description, body.points)
         .then(() => {
                 console.log("Item created: " + body.title);
-                res.status(200).json({title: body.title});                    
+                res.status(200).json({title: body.title});
         })
 
     }

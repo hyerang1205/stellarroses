@@ -46,8 +46,3 @@ body{
   .submitModal .modal .modal-body {
     overflow-y: auto;
   }
-
-  div.card-body:hover{
-    cursor: pointer;
-  }
-

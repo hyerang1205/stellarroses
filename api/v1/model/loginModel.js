@@ -9,8 +9,11 @@ function getUserId(username) {
 function getLocation(username) {
     return db.pool.query("Select location from users where username ='" +username +"'");
 }
-function getPoints(username) {
-    return db.pool.query("Select points from users where username ='" +username +"'");
+async function getPoints(username) {
+    return await db.pool.query("Select points from users where username ='" +username +"'");
+}
+function setPoints(username, points) {
+    return db.pool.query("UPDATE users SET points = '" + points +"' where username ='" +username +"'");
 }
 
 async function registerUser(username, password, location) {
@@ -32,6 +35,7 @@ module.exports = {
     getPoints: getPoints,
     registerUser: registerUser,
     getUsers: getUsers,
-    deleteUser: deleteUser
+    deleteUser: deleteUser,
+    setPoints: setPoints
 }
 

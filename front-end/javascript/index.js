@@ -8,6 +8,7 @@
 // }
 var shoppingCart = [];
 
+
 /**
  * Displays items within shopping cart and updates shopping cart icon's number.
  *
@@ -47,7 +48,7 @@ getDbItems = () => {
                     spacing.className = "w-100";
                     document.getElementById("board").appendChild(spacing);
                 }
-                generateCard(data[i].title, data[i].description, data[i].points);
+                generateCard(data[i].title, data[i].description, data[i].points, data[i].id);
             }
         }).
     catch(e => {
@@ -55,18 +56,7 @@ getDbItems = () => {
     });
 }
 
-/**
- * Generates card objects using DOM. Should be broken down to smaller functions.
- * 
- * @param {date} listDate intended date of item listing
- * @param {string} itemName name of item
- * @param {integer} price price of item
- * @param {integer} quantity stock of item
- * @param {integer} discount discount for item, ranges 0-100
- * @param {string} itemCategory category of item 
- * @param {string} image datauri for item image
- * */
-generateCard = (title, description, points) => {
+generateCard = (title, description, points, id) => {
     let column = document.createElement("div");
     column.className = "col";
     let cardObject = document.createElement("div");
@@ -84,11 +74,23 @@ generateCard = (title, description, points) => {
     displayDesc.innerHTML = description;
     displayDesc.className = "small text-muted mb-2";
     displayPoints.className = "small text-uppercase mb-2";
+
+    let tocomplete = document.createElement("button");
+    tocomplete.className = "btn btn-secondary btn-sm mr-1 mb-2"
+    tocomplete.innerHTML = "To Complete";
+    tocomplete.onclick = (() => {
+        console.log("hello");
+    });
+
     cardText.appendChild(header);
     cardText.appendChild(displayDesc);
     cardText.appendChild(displayPoints);
     cardText.appendChild(linebreak);
-    cardObject.appendChild(overlayDiv);board
+    if (localStorage.getItem('token')!='null'){ 
+        // cardText.appendChild(tocomplete);
+        cardText.innerHTML += '<button class="btn btn-secondary btn-sm mr-1 mb-2" data-toggle="modal" data-target="#completeModal" id=>To Complete</button>';
+    }
+    cardObject.appendChild(overlayDiv);
     cardObject.appendChild(cardText);
     column.appendChild(cardObject);
     document.getElementById("board").appendChild(column);
@@ -97,16 +99,28 @@ generateCard = (title, description, points) => {
 
 
 
-getDbItems();
-
 // document.getElementById("manageInventory").onclick = (event)=>{
 //     alert("clicked button");
 //     event.preventDefault();
 // }
+console.log(localStorage);
+getDbItems();
 
 $(document).ready(function () {
+    if (localStorage.getItem('token')=='null'){
+        $('#logstate').html('<a class="nav-link align-items-center d-flex" data-toggle="modal" data-target="#loginModal" href="#"><i id="login-navbar" class="fa fa-fw fa-2x mr-2"></i> LOGIN</a>');
+    }
+    else{
+        $('#logstate').html('<a class="nav-link align-items-center d-flex" href="./index.html"><i id="login-navbar" class="fa fa-fw fa-2x mr-2"></i> LOGOUT</a>');
+        $("#logstate").click(() => {
+            if (localStorage.getItem('token')){
+                localStorage.setItem('token', null);
+            }
+        });
+    }
+
     $("#login_submit").click(() => {
-        fetch('https://shopify-challenge-db.herokuapp.com/v1/login', {
+        fetch('http://localhost:3000/v1/login', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -130,12 +144,16 @@ $(document).ready(function () {
                 }
             })
             .then(data => {
-                localStorage.setItem('session', data[0].user_id);
-                location.href = "./inventory.html";
+                console.log(data);
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('location', data.location);
+                localStorage.setItem('points', data.points);
+                location.href = "./index.html";
+                console.log(localStorage);
             }).
-        catch(e => {
-            alert(e);
-        });
+            catch(e => alert(e));
+        
     });
 
  

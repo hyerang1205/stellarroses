@@ -9,17 +9,37 @@ async function authUser(req,res) {
             if(users.rowCount == 1) {
                 res.status(200).json({token:
                     jwt.sign({
-                        user_name:users.rows[0].user_name,
-                        password:users.rows[0].password,
-                        location: users.rows[0].location
-                    }, secret),
-                    location: users.rows[0].location,
-                    points: users.rows[0].points
+                        user_name: body.username,
+                        potins: body.points,
+                        location: body.location
+                    },'MYSECRETKEY'),
+                    username: body.username,
+                    potins: body.points,
+                    location: body.location
                 });
                 console.log("Log in!");
             } else {
                 res.status(401).json({message: 'No such user'})
             }
+    });
+}
+
+async function setPoints(req,res) {
+    let body = req.body;
+    userModel.getPoints(body.username ,body.password)
+        .then((data)=>{
+            console.log(data);
+            if(data.rowCount == 1) {
+                res.status(200).json(data[0]);
+                console.log("Found!");
+            } else {
+                res.status(401).json({message: 'No such user'})
+            }
+    });
+    userModel.setPoints(body.username ,body.points)
+        .then((data)=>{
+            res.status(200).json('Updated Entry in database.');
+            console.log("Updated");
     });
 }
 
@@ -37,8 +57,11 @@ async function register(req,res) {
                         res.status(200).json({token:
                             jwt.sign({
                                 user_name: body.username,
-                                password: body.password,
+                                potins: body.points,
+                                location: body.location
                             },'MYSECRETKEY'),
+                            username: body.username,
+                            potins: body.points,
                             location: body.location
                     });                    
                 })
@@ -83,5 +106,6 @@ module.exports = {
     authUser: authUser,
     register: register,
     getUsers: getUsers,
-    deleteUser: deleteUser
+    deleteUser: deleteUser,
+    setPoints: setPoints
 }
