@@ -92,14 +92,14 @@ pool.connect(err => {
   //   "INSERT INTO items(title, description, points) VALUES ('Youtube Team Viewing', 'View a Youtube Video with a minimum of 4 team members', 5);",
   //   callback
   // );
-//   await client.query(
-//       "CREATE TABLE city_scores(city_name VARCHAR(40) NOT NULL, points INT DEFAULT 0, PRIMARY KEY(city_name));",
-//       callback
-//     );
-//     await client.query(
-//         "INSERT INTO city_scores(city_name, points) VALUES ('Vancouver', 999);",
-//         callback
-//       );
+  // await client.query(
+  //     "CREATE TABLE IF NOT EXISTS user_images(image TEXT NOT NULL, id INT, CONSTRAINT id FOREIGN KEY(id) REFERENCES users(id));",
+  //     callback
+  //   );
+    // await client.query(
+    //     "INSERT INTO user_images(image, id) VALUES ('placeholdertext', 639035092984702737);",
+    //     callback
+    //   );
 //   await client.query("SELECT id, multiplier FROM sealevel;", callback);
 //   await client.query(
 //       "SELECT * FROM users",
@@ -110,7 +110,7 @@ pool.connect(err => {
 //       callback
 //     );
 //     await client.query(
-//       "SELECT * FROM city_scores",
+//       "SELECT * FROM user_images",
 //       callback
 //     );
 // }
@@ -172,6 +172,6 @@ pool.connect(err => {
 //   console.log("Transferring funds...");
 //   await retryTxn(0, 15, client, transferFunds, cb);
 
-// //   // Exit program
+// // //   // Exit program
 //   process.exit();
 // })().catch((err) => console.log(err.stack));

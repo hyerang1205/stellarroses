@@ -9,6 +9,7 @@ const loginController = require('./controller/loginController');
 const seaController = require('./controller/seaLevelController');
 const itemsController = require('./controller/itemsController');
 const cityController = require('./controller/cityController');
+const imageController = require('./controller/imageController');
 
 api.use(bodyParser.urlencoded({
     extended: false
@@ -38,4 +39,8 @@ api.get('/scores/:city', cityController.searchCity);
 api.post('/scores/:city', cityController.createCity);
 
 api.put('/scores/:city', cityController.updateCityScore);
+
+api.post('/images/:id', imageController.createImage);
+
+api.get('/images/:id', imageController.getImages);
 module.exports = api;
