@@ -76,6 +76,8 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     controls.handleResize();
 }
+//STELLLAA right HERE!!! this is the code and you need to check the material!! inside addGlobeSphere!!
+//please make the material make the globe look shiny and like the one on github.com when you are not logged in
 function addGlobeSphere() {
     let length = 200;
     const geometry = new THREE.SphereGeometry(50, length, length);
@@ -88,7 +90,8 @@ function addGlobeSphere() {
     scene.add(sphere);
 
     // var geometry1 = new THREE.SphereGeometry(50, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
-    // var material1 = new THREE.MeshNormalMaterial();
+    // this is the gradient that you were talking about stella <<<<<<<<<<<<<<<<<<<<<<<<<<
+    //  var material1 = new THREE.MeshNormalMaterial();
     // var cube1 = new THREE.Mesh(geometry1, material1);
     // scene.add(cube1);
 }
@@ -128,15 +131,31 @@ addGlobe();
 //     }
 // }
 
-function onWater(lat, lng) {
-    fetch(`https://api.onwater.io/api/v1/results/${lat},${lng}?access_token=Mz4yZsaQizXfoL-xc56s`)
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data.water);
-            return { water: data.water };
-        });
-}
+let onWaterr = async (lat, lng) => {
+    let water = await fetch(
+        `https://api.onwater.io/api/v1/results/${lat},${lng}?access_token=Mz4yZsaQizXfoL-xc56s`
+    );
 
-onWater(10, 10).then(function (result) {
-    console.log(result.water + "hannah chung hates sushi");
-});
+    return water;
+};
+async function getWaterr(lat, lng) {
+    try {
+        const response = await fetch(
+            "https://api.onwater.io/api/v1/results/" +
+                lat +
+                "," +
+                lng +
+                "?access_token=Mz4yZsaQizXfoL-xc56s"
+        );
+        console.log({ water: response.water });
+        return { water: response.water };
+    } catch (err) {
+        console.log("fetch failed", err);
+    }
+}
+let hi = async (lat, lng) => {
+    let hanna = await onWater(10, 10);
+    console.log(hanna.water + "hates sushi");
+};
+
+hi();

@@ -14,9 +14,9 @@ document.addEventListener(
 document.getElementById("where").addEventListener("click", () => {
     geocodeLatLng(40.714224, -73.961452);
 });
-
+// return is here because we need to return a promise
 function onWater(lat, lng) {
-    fetch(`https://api.onwater.io/api/v1/results/${lat},${lng}?access_token=Mz4yZsaQizXfoL-xc56s`)
+    return fetch(`https://api.onwater.io/api/v1/results/${lat},${lng}?access_token=Mz4yZsaQizXfoL-xc56s`)
         .then((response) => response.json())
         .then((data) => {
             return { water: data.water };
@@ -24,7 +24,7 @@ function onWater(lat, lng) {
 }
 
 function geocodeLatLng(lat, lng) {
-    fetch(
+    return fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyAu_e9Vo1w62NzrVMLZvCr5m-Rl1ncItCU`
     )
         .then((response) => response.json())
