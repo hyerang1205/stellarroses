@@ -4,7 +4,7 @@ const express = require("express");
 const port = localhost || 3000;
 const bodyParser = require('body-parser');
 let cors = require('cors');
-
+require('dotenv').config();
 const api = express.Router();
 
 api.use(bodyParser.urlencoded({
@@ -20,3 +20,5 @@ api.get('/', (req, res) => res
     .send({
         message: 'Hello! You have reached the server for WaveNation by Stellar Roses!'
     }));
+
+module.exports = api;
