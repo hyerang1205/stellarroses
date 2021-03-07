@@ -82,11 +82,36 @@ function onWindowResize() {
 function addGlobeSphere() {
     let length = 200;
     const geometry = new THREE.SphereGeometry(50, length, length);
-    const material = new THREE.MeshPhongMaterial({
-        color: 0x360ccc, // red (can also use a CSS color string here)
-        flatShading: true,
-        shininess: 2,
-    });
+    var material = new THREE.ShaderMaterial({
+        uniforms: {
+          color1: {
+            value: new THREE.Color("blue")
+          },
+          color2: {
+            value: new THREE.Color("green")
+          }
+        },
+        vertexShader: `
+          varying vec2 vUv;
+      
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 color1;
+          uniform vec3 color2;
+        
+          varying vec2 vUv;
+          
+          void main() {
+            
+            gl_FragColor = vec4(mix(color1, color2, vUv.y), 1.0);
+          }
+        `,
+        wireframe: true
+      });
     const sphere = new THREE.Mesh(geometry, material);
     scene.add(sphere);
 
