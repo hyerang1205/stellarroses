@@ -88,9 +88,6 @@ generateCard = (title, description, points) => {
     let cardObject = document.createElement("div");
     cardObject.className = "card";
     let overlayDiv = document.createElement("div");
-    // overlayDiv.className = "view zoom overlay card-body";
-    // let img = image;
-    // img.className = "card-img-top";
     let cardText = document.createElement("div");
     cardText.className = "card-body text-center";
     let header = document.createElement("h5");
@@ -103,84 +100,17 @@ generateCard = (title, description, points) => {
     displayDesc.innerHTML = description;
     displayDesc.className = "small text-muted mb-2";
     displayPoints.className = "small text-uppercase mb-2";
-
-    //price calculation
-    // let currentPrice = document.createElement("span");
-    // currentPrice.className = "text-success mr-1";
-    // currentPrice.innerHTML = "$ " + calculateDiscount(price, discount);
-
-    // let previousPrice = document.createElement("span");
-    // previousPrice.className = "text-danger mr-1";
-
-    // let addToCart = document.createElement("button");
-    // addToCart.className = "btn btn-primary btn-sm mr-1 mb-2"
-    // addToCart.innerHTML = "Add to Cart";
-    // addToCart.onclick = (() => {
-    //     detail = {
-    //         "listDate": listDate,
-    //         "itemName": itemName,
-    //         "price": price,
-    //         "discount": discount,
-    //         "quantity": quantity,
-    //         "itemCategory": category,
-    //         "image": image.src
-    //     };
-    //     shoppingCart.push(detail);
-    //     displayCart();
-    // });
     cardText.appendChild(header);
     cardText.appendChild(displayDesc);
     cardText.appendChild(displayPoints);
     cardText.appendChild(linebreak);
-    // //check to see if discount is invalid
-    // if (price <= calculateDiscount(price, discount)) {
-    //     previousPrice.className = "text-gray mr-1";
-    //     previousPrice.innerHTML = "$ " + price + "</br>";
-    //     cardText.appendChild(previousPrice);
-    //     let saleOverlay = document.createElement('h4');
-    //     saleOverlay.className = "mb-2";
-    //     let saleSpan = document.createElement('span');
-    //     saleSpan.className = "badge badge-success";
-    //     saleSpan.innerHTML = "NEW";
-    //     saleOverlay.appendChild(saleSpan);
-    //     overlayDiv.appendChild(saleOverlay);
-    // } else {
-    //     previousPrice.innerHTML = "<s>$ " + price + "</s></br>";
-    //     cardText.appendChild(currentPrice);
-    //     cardText.appendChild(previousPrice);
-    //     let saleOverlay = document.createElement('h4');
-    //     saleOverlay.className = "mb-2";
-    //     let saleSpan = document.createElement('span');
-    //     saleSpan.className = "badge badge-danger";
-    //     saleSpan.innerHTML = "SALE";
-    //     saleOverlay.appendChild(saleSpan);
-    //     overlayDiv.appendChild(saleOverlay);
-    // }
-    // cardText.appendChild(addToCart);
     cardObject.appendChild(overlayDiv);board
     cardObject.appendChild(cardText);
     column.appendChild(cardObject);
     document.getElementById("board").appendChild(column);
 }
 
-/**
- * Calculates total price of everything within user's cart.
- *
- * 
- * */
-calculateCartTotal = () => {
-    let object = {};
-    let price = 0;
-    for (i = 0; i < shoppingCart.length; i++) {
-        let discounted = calculateDiscount(shoppingCart[i].price, shoppingCart[i].discount);
-        if (discounted >= shoppingCart[i].price) {
-            price += parseFloat(shoppingCart[i].price);
-        } else {
-            price += parseFloat(discounted);
-        }
-    }
-    return price;
-}
+
 
 
 getDbItems();
