@@ -107,7 +107,7 @@ function addGlobe() {
             vertex.x = coord.x * 100.0;
             vertex.y = coord.y * 100.0;
             vertex.z = coord.z * 100.0;
-            console.log("112" + coord.x * 100.0);
+            // console.log("112" + coord.x * 100.0);
             geometry.vertices.push(vertex);
         }
     }
@@ -119,8 +119,8 @@ addGlobe();
 
 for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
-        console.log("\t00000lat " + i + "\tlong" + j + "\t");
+        // console.log("\t00000lat " + i + "\tlong" + j + "\t");
         let vector = latLngToVector3({ lat: i, lng: j });
-        console.log("x:" + vector.x + "y:" + vector.y + "   \tz:" + vector.z);
+        // console.log("x:" + vector.x + "y:" + vector.y + "   \tz:" + vector.z);
     }
 }
