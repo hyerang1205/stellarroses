@@ -112,7 +112,7 @@ $(document).ready(function () {
         $('#logstate').html('<a class="nav-link align-items-center d-flex" href="./index.html"><i id="login-navbar" class="fa fa-fw fa-2x mr-2"></i> LOGOUT</a>');
         $("#logstate").click(() => {
             if (localStorage.getItem('token')){
-                localStorage.setItem('token', null);
+                localStorage.removeItem('token');
             }
             
         });
