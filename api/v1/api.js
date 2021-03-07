@@ -27,7 +27,7 @@ api.get('/', (req, res) => res
 
 api.get('/sealevel/:id', seaController.getUserLevels);
 api.post('/login', loginController.authUser);
-api.put('/setPoints', loginController.setPoints);
+api.put('/addPoints', loginController.addPoints);
 api.post('/register', loginController.register);
 //Internal use
 api.get('/users', loginController.getUsers);

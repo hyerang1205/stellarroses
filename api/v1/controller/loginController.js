@@ -24,22 +24,20 @@ async function authUser(req,res) {
     });
 }
 
-async function setPoints(req,res) {
+async function addPoints(req,res) {
     let body = req.body;
-    userModel.getPoints(body.username ,body.password)
+    userModel.getPoints(body.username)
         .then((data)=>{
-            console.log(data);
             if(data.rowCount == 1) {
-                res.status(200).json(data[0]);
-                console.log("Found!");
+                console.log(data.rows[0]);
+                userModel.setPoints(body.username , (Number(data.rows[0].points) + Number(body.points)))
+                    .then((data)=>{
+                        res.status(200).json('Added points in database.');
+                        console.log("Added");
+                });
             } else {
                 res.status(401).json({message: 'No such user'})
             }
-    });
-    userModel.setPoints(body.username ,body.points)
-        .then((data)=>{
-            res.status(200).json('Updated Entry in database.');
-            console.log("Updated");
     });
 }
 
@@ -107,5 +105,5 @@ module.exports = {
     register: register,
     getUsers: getUsers,
     deleteUser: deleteUser,
-    setPoints: setPoints
+    addPoints: addPoints
 }
