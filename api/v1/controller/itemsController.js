@@ -26,16 +26,24 @@ async function getPoints(req,res) {
 
 
 async function addItem(req,res) {
-    itemsModel.getItems()
-        .then((result)=>{
-            res.status(200).json(result);
-        });
+    let body = req.body;
+    try{
+        itemsModel.addItem(body.title, body.description, body.points)
+        .then(() => {
+                console.log("Item created: " + body.title);
+                res.status(200).json({title: body.title});                    
+        })
+
+    }
+    catch(e){
+        console.log(e);
+    }
 }
 
 async function getItems(req,res) {
     itemsModel.getItems()
         .then((result)=>{
-            res.status(200).json(result);
+            res.status(200).json(result.rows);
         });
 }
 
