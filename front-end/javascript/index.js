@@ -20,24 +20,8 @@ displayCart = () => {
     localStorage.setItem("cart", shoppingCart);
 }
 
-/**
- * Calculates the discounted price.
- *@param {number} price item price
- *@param {integer} discount discount ranges 0-100 
- * 
- * 
- * */
-calculateDiscount = (price, discount) => {
-    let discountedPrice = (1 - (discount / 100)) * price;
-    return discountedPrice.toFixed(2);
-}
 
-/**
- * Retrieves data for marketplace/home page. 
- * Dynamically generates cards for store items from database json.
- *
- * 
- * */
+
 getDbItems = () => {
     fetch('http://localhost:3000/v1/items/', {
         method: 'GET', // likewise we have DELETE, PUT, PATCH

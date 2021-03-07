@@ -42,9 +42,16 @@ getScore = (cityname) => {
     })
 }
 
+getSortedScores = () =>{
+    return db.pool.query({
+        text: "SELECT * from city_scores ORDER BY points DESC"
+    })
+}
+
 
 module.exports = {
    getScore,
    addNewCity,
-   updateScore
+   updateScore,
+   getSortedScores
 }

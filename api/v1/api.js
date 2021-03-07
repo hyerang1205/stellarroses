@@ -44,4 +44,6 @@ api.put('/scores/:city', cityController.updateCityScore);
 api.post('/images/:id', imageController.createImage);
 
 api.get('/images/:id', imageController.getImages);
+
+api.get('/scores', cityController.getLeaderBoard);
 module.exports = api;

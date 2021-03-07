@@ -17,31 +17,31 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
-    <script src="./javascript/index.js"></script>
+    <script src="./javascript/leaderboard.js"></script>
 </head>
 
 <body>
- <!-- Nav Bar -->
- <nav class="navbar sticky-top navbar-expand-md navbar-light mb-5 pb-5 transparent">
-    <div class="container">
-        <a class="navbar-brand" href="./index.html">👋Nation</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-            data-target="#navbarTransparentContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse text-center justify-content-end" id="navbarTransparentContent">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="../globe/index.html">WAVENATION GLOBE</a>
-                </li>
-                <li class="nav-item mx-1">
-                    <a class="nav-link align-items-center d-flex" href="./index.html">
-                        <i class="fa  fa-fw fa-2x mr-2"></i>TEAM CHALLENGES</a>
-                </li>
-            </ul>
+    <!-- Nav Bar -->
+    <nav class="navbar sticky-top navbar-expand-md navbar-light mb-5 pb-5 transparent">
+        <div class="container">
+            <a class="navbar-brand" href="./index.html">👋Nation</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarTransparentContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-center justify-content-end" id="navbarTransparentContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../globe/index.html">WAVENATION GLOBE</a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a class="nav-link align-items-center d-flex" href="./index.html">
+                            <i class="fa  fa-fw fa-2x mr-2"></i>TEAM CHALLENGES</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
 
     <div class="opaqueBox container d-flex align-items-center min-vh-90 ">
@@ -51,15 +51,22 @@
                 <p class="lead">Team Scores are updated in real time.
                 </p>
                 <hr class="my-4">
-                <div id = "rankings"></div>
+                <table class="table table-image">
+                    <thead>
+                        <tr>
+                            <th scope="col">Rank</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankings">
+                    </tbody>
+                </table>
             </div>
 
 
         </div>
-    </div>
 
     </div>
-   
+
 </body>
 
 </html>
