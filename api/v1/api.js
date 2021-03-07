@@ -30,5 +30,5 @@ api.post('/register', loginController.register);
 api.get('/users', loginController.getUsers);
 
 api.get('/items', itemsController.getItems);
-
+api.delete('/delte', loginController.delteUser);
 module.exports = api;

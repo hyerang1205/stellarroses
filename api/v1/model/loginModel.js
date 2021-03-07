@@ -21,7 +21,9 @@ async function registerUser(username, password, location) {
 function getUsers(){
     return  db.pool.query(`Select * from users`); 
 }
-
+function deleteUser(username){
+    return  db.pool.query("Delete from users where username ='"+username +"'"); 
+}
 
 module.exports = {
     findUser: findUser,
@@ -29,6 +31,7 @@ module.exports = {
     getLocation: getLocation,
     getPoints: getPoints,
     registerUser: registerUser,
-    getUsers: getUsers
+    getUsers: getUsers,
+    deleteUser: deleteUser
 }
 
