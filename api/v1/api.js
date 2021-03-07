@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 let cors = require('cors');
 require('dotenv').config();
 const api = express.Router();
+let loginController = require('./controller/loginController');
+
 
 api.use(bodyParser.urlencoded({
     extended: false
@@ -20,5 +22,9 @@ api.get('/', (req, res) => res
     .send({
         message: 'Hello! You have reached the server for WaveNation by Stellar Roses!'
     }));
+
+
+api.post('/login', loginController.authUser);
+api.post('/register', loginController.register);
 
 module.exports = api;
