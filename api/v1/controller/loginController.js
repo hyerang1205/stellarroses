@@ -9,13 +9,15 @@ async function authUser(req,res) {
             if(users.rowCount == 1) {
                 res.status(200).json({token:
                     jwt.sign({
-                        user_name: body.username,
-                        potins: body.points,
-                        location: body.location
+                        user_name: users.rows[0].user_name,
+                        points: users.rows[0].points,
+                        location: users.rows[0].location,
+                        id : users.rows[0].id
                     },'MYSECRETKEY'),
-                    username: body.username,
-                    potins: body.points,
-                    location: body.location
+                    username: users.rows[0].user_name,
+                    points: users.rows[0].points,
+                    location: users.rows[0].location,
+                    id : users.rows[0].id
                 });
                 console.log("Log in!");
             } else {
@@ -57,11 +59,11 @@ async function register(req,res) {
                         res.status(200).json({token:
                             jwt.sign({
                                 user_name: body.username,
-                                potins: body.points,
+                                points: body.points,
                                 location: body.location
                             },'MYSECRETKEY'),
                             username: body.username,
-                            potins: body.points,
+                            points: body.points,
                             location: body.location
                     });                    
                 })
