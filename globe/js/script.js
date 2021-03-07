@@ -30,7 +30,7 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     //appending the render  to the container
-    document.body.appendChild(renderer.domElement);
+    document.getElementById('canvas').appendChild(renderer.domElement);
     // Create camera.
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 2000);
     camera.position.z = 230;
@@ -186,3 +186,11 @@ let hi = async (lat, lng) => {
 };
 
 hi();
+
+var slider = document.getElementById("slider");
+var output = document.getElementById("output");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
