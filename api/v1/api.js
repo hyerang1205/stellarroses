@@ -32,6 +32,7 @@ api.post('/register', loginController.register);
 api.get('/users', loginController.getUsers);
 
 api.get('/items', itemsController.getItems);
+api.post('/addItem', itemsController.addItem);
 // api.delete('/delte', loginController.delteUser);
 
 api.get('/scores/:city', cityController.searchCity);
