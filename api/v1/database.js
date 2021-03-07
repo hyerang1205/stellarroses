@@ -84,15 +84,35 @@ pool.connect(err => {
   //   "INSERT INTO sealevel (id, multiplier, current_year) VALUES (1, 3.3, 2020);",
   //   callback
   // );
-  //   await client.query(
-  //   "INSERT INTO users (username, password) VALUES ('test','test123');",
+  // await client.query(
+  //   "CREATE TABLE items(id SERIAL, title VARCHAR(40) NOT NULL, description TEXT NOT NULL, points INT, PRIMARY KEY(id));",
   //   callback
   // );
-  // await client.query("SELECT id, multiplier FROM sealevel;", callback);
-  // await client.query(
-  //     "SELECT * FROM users",
-  //     callback
-  //   );
+  //   await client.query(
+  //   "INSERT INTO items(title, description, points) VALUES ('Youtube Team Viewing', 'View a Youtube Video with a minimum of 4 team members', 5);",
+  //   callback
+  // );
+//   await client.query(
+//       "CREATE TABLE city_scores(city_name VARCHAR(40) NOT NULL, points INT DEFAULT 0, PRIMARY KEY(city_name));",
+//       callback
+//     );
+//     await client.query(
+//         "INSERT INTO city_scores(city_name, points) VALUES ('Vancouver', 999);",
+//         callback
+//       );
+//   await client.query("SELECT id, multiplier FROM sealevel;", callback);
+//   await client.query(
+//       "SELECT * FROM users",
+//       callback
+//     );
+//     await client.query(
+//       "SELECT * FROM items",
+//       callback
+//     );
+//     await client.query(
+//       "SELECT * FROM city_scores",
+//       callback
+//     );
 // }
 
 // async function transferFunds(client, callback) {

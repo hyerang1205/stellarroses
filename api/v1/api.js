@@ -8,6 +8,7 @@ const api = express.Router();
 const loginController = require('./controller/loginController');
 const seaController = require('./controller/seaLevelController');
 const itemsController = require('./controller/itemsController');
+const cityController = require('./controller/cityController');
 
 api.use(bodyParser.urlencoded({
     extended: false
@@ -30,5 +31,11 @@ api.post('/register', loginController.register);
 api.get('/users', loginController.getUsers);
 
 api.get('/items', itemsController.getItems);
-api.delete('/delte', loginController.delteUser);
+// api.delete('/delte', loginController.delteUser);
+
+api.get('/scores/:city', cityController.searchCity);
+
+api.post('/scores/:city', cityController.createCity);
+
+api.put('/scores/:city', cityController.updateCityScore);
 module.exports = api;
