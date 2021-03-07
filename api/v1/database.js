@@ -4,7 +4,7 @@ require('dotenv').config('../../env');
 const fs = require('fs');
 const { Pool } = require("pg");
 
-console.log(process.env);
+
 // Configure the database connection.
 const config = {
   user: process.env.db_user,
@@ -43,49 +43,57 @@ pool.connect(err => {
 // the client as an argument as long as the database server asks for
 // the transaction to be retried.
 
-// async function retryTxn(n, max, client, operation, callback) {
-//   await client.query("BEGIN;");
-//   while (true) {
-//     n++;
-//     if (n === max) {
-//       throw new Error("Max retry count reached.");
-//     }
-//     try {
-//       await operation(client, callback);
-//       await client.query("COMMIT;");
-//       return;
-//     } catch (err) {
-//       if (err.code !== "40001") {
-//         return callback(err);
-//       } else {
-//         console.log("Transaction failed. Retrying transaction.");
-//         console.log(err.message);
-//         await client.query("ROLLBACK;", () => {
-//           console.log("Rolling back transaction.");
-//         });
-//         await new Promise((r) => setTimeout(r, 2 ** n * 1000));
-//       }
-//     }
-//   }
-// }
+async function retryTxn(n, max, client, operation, callback) {
+  await client.query("BEGIN;");
+  while (true) {
+    n++;
+    if (n === max) {
+      throw new Error("Max retry count reached.");
+    }
+    try {
+      await operation(client, callback);
+      await client.query("COMMIT;");
+      return;
+    } catch (err) {
+      if (err.code !== "40001") {
+        return callback(err);
+      } else {
+        console.log("Transaction failed. Retrying transaction.");
+        console.log(err.message);
+        await client.query("ROLLBACK;", () => {
+          console.log("Rolling back transaction.");
+        });
+        await new Promise((r) => setTimeout(r, 2 ** n * 1000));
+      }
+    }
+  }
+}
 
 // // This function is called within the first transaction. It creates a table and inserts some initial values.
 
-// async function initTable(client, callback) {
-//   await client.query(
-//     "CREATE TABLE IF NOT EXISTS sealevel (id INT PRIMARY KEY, multiplier NUMERIC NOT NULL, current_year INT);",
-//     callback
-//   );
-//   await client.query(
-//     "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY, multiplier NUMERIC NOT NULL, current_year INT);",
-//     callback
-//   );
-//   await client.query(
-//     "INSERT INTO sealevel (id, multiplier, current_year) VALUES (1, 3.3, 2020);",
-//     callback
-//   );
-//   await client.query("SELECT id, multiplier FROM sealevel;", callback);
-// }
+async function initTable(client, callback) {
+  await client.query(
+    "CREATE TABLE IF NOT EXISTS sealevel (id INT PRIMARY KEY, multiplier NUMERIC NOT NULL, current_year INT);",
+    callback
+  );
+  await client.query(
+    "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, username VARCHAR(40) NOT NULL, password VARCHAR(40) NOT NULL, location VARCHAR(40) DEFAULT 'Vancouver', points INT DEFAULT 0);",
+    callback
+  );
+  // await client.query(
+  //   "INSERT INTO sealevel (id, multiplier, current_year) VALUES (1, 3.3, 2020);",
+  //   callback
+  // );
+  //   await client.query(
+  //   "INSERT INTO users (username, password) VALUES ('test','test123');",
+  //   callback
+  // );
+  await client.query("SELECT id, multiplier FROM sealevel;", callback);
+  await client.query(
+      "SELECT * FROM users",
+      callback
+    );
+}
 
 // async function transferFunds(client, callback) {
 //   const from = 1;
@@ -120,30 +128,30 @@ pool.connect(err => {
 
 // Run the transactions in the connection pool
 
-// (async () => {
-// //   // Connect to database
-//   const client = await pool.connect();
+(async () => {
+//   // Connect to database
+  const client = await pool.connect();
 
-// //   // Callback
-//   function cb(err, res) {
-//     if (err) throw err;
+//   // Callback
+  function cb(err, res) {
+    if (err) throw err;
 
-//     if (res.rows.length > 0) {
-//       console.log("New entries:");
-//       res.rows.forEach((row) => {
-//         console.log(row);
-//       });
-//     }
-//   }
+    if (res.rows.length > 0) {
+      console.log("New entries:");
+      res.rows.forEach((row) => {
+        console.log(row);
+      });
+    }
+  }
 
-//   // Initialize table in transaction retry wrapper
-//   console.log("Initializing table...");
-//   await retryTxn(0, 15, client, initTable, cb);
+  // Initialize table in transaction retry wrapper
+  console.log("Initializing table...");
+  await retryTxn(0, 15, client, initTable, cb);
 
-// //   // Transfer funds in transaction retry wrapper
-// //   console.log("Transferring funds...");
-// //   await retryTxn(0, 15, client, transferFunds, cb);
+//   // Transfer funds in transaction retry wrapper
+//   console.log("Transferring funds...");
+//   await retryTxn(0, 15, client, transferFunds, cb);
 
-// //   // Exit program
-//   process.exit();
-// })().catch((err) => console.log(err.stack));
+//   // Exit program
+  process.exit();
+})().catch((err) => console.log(err.stack));
