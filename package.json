@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "pg": "^8.5.1"
   },
@@ -21,7 +22,8 @@
     "climate",
     "change",
     "cockroach",
-    "db"
+    "db",
+    "dotenv"
   ],
   "author": "songrose, stellatranhi, lenakwan, hyerang1205",
   "license": "ISC"
