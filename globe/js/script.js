@@ -95,11 +95,24 @@ function addGlobeSphere() {
     // var cube1 = new THREE.Mesh(geometry1, material1);
     // scene.add(cube1);
 }
-function addGlobe() {
+let returnVertex = async (x, y) => {
+    let coord = latLngToVector3({ lat: x, lng: y });
+    let isLand = await onWater(coord.x, coord.y);
+    isLand = !isLand;
+    console.log("[returnVertex]" + isLand);
+    if (isLand) {
+        var vertex = new THREE.Vector3();
+        vertex.x = coord.x * globescale;
+        vertex.y = coord.y * globescale;
+        vertex.z = coord.z * globescale;
+        return vertex;
+    }
+};
+function addGlobePoints() {
     let globescale = 50;
     geometry = new THREE.Geometry(); /*	NO ONE SAID ANYTHING ABOUT MATH! UGH!	*/
     let size = globescale * 0.005;
-    let upperLimit = 90;
+    let upperLimit = -87;
     particleCount = 100; /* Leagues under the sea */
     materials = new THREE.PointCloudMaterial({
         size: size,
@@ -107,21 +120,17 @@ function addGlobe() {
     });
     for (let i = -90; i < upperLimit; i++) {
         for (let j = -180; j <= upperLimit * 2; j++) {
-            let coord = latLngToVector3({ lat: i, lng: j });
-
-            var vertex = new THREE.Vector3();
-            vertex.x = coord.x * globescale;
-            vertex.y = coord.y * globescale;
-            vertex.z = coord.z * globescale;
-            // console.log("112" + coord.x * 100.0);
-            geometry.vertices.push(vertex);
+            let vertex = returnVertex(i, j);
+            if (vertex) {
+                geometry.vertices.push(vertex);
+            }
         }
     }
     particles = new THREE.PointCloud(geometry, materials);
     scene.add(particles);
 }
 addGlobeSphere();
-addGlobe();
+addGlobePoints();
 
 // for (let i = 0; i < 10; i++) {
 //     for (let j = 0; j < 10; j++) {
@@ -153,9 +162,6 @@ async function getWaterr(lat, lng) {
         console.log("fetch failed", err);
     }
 }
-let hi = async (lat, lng) => {
-    let hanna = await onWater(10, 10);
-    console.log(hanna.water + "hates sushi");
-};
+//returns the vertex of dot if it is a country
 
 hi();
