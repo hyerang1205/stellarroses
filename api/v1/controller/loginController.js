@@ -20,7 +20,7 @@ async function authUser(req,res) {
             } else {
                 res.status(401).json({message: 'No such user'})
             }
-        });
+    });
 }
 
 async function register(req,res) {
@@ -31,17 +31,15 @@ async function register(req,res) {
         .then((result)=>{
             if(result.rowCount == 0) {
                 console.log('No such user. Lets go');
-                userModel.registerUser(body.username ,body.password, body.location, body.points)
+                userModel.registerUser(body.username ,body.password, body.location)
                 .then(() => {
                         console.log("User created: " + body.username);
                         res.status(200).json({token:
                             jwt.sign({
                                 user_name: body.username,
                                 password: body.password,
-                                location: users.rows[0].location
                             },'MYSECRETKEY'),
-                            country: users.rows[0].country,
-                            points: users.rows[0].points
+                            location: body.location
                     });                    
                 })
             } else {
@@ -55,28 +53,35 @@ async function register(req,res) {
     }
 }
 
-
-async function getToken(req,res) {
-    let body = req.body;
-    userModel.findUser(body.username ,body.password)
+//internal use
+async function getUsers(req,res) {
+    userModel.getUsers()
         .then((users)=>{
-            if(users.rowCount == 1) {
-                res.status(200).json({token:
-                    jwt.sign({
-                        user_name:users.rows[0].username,
-                        password:users.rows[0].password
-                    },'MYSECRETKEY'),
-                    location: users.rows[0].location,
-                    points: users.rows[0].points
-                });
-                console.log("Log in!");
-            } else {
-                res.status(401).json({message: 'No such user'})
-            }
+            res.status(200).json(users);
         });
 }
 
+deleteUser= async (req,res) =>{
+    let user;
+    // if (req.headers && req.headers.authorization){
+    //     user = await validateToken(req.headers.authorization);
+    // }
+    if (!user){
+        res.status(402).json('Unauthorized user');
+    } else {
+        let body = req.body;
+            console.log(body);
+        userModel.deleteUser(body.username).then( (data) => {
+            res.status(200).json('Deleted entry in database.');
+        }).
+        catch(e => res.status(500).json({message:e.message}));
+    }
+}
+
+
 module.exports = {
     authUser: authUser,
-    register: register
+    register: register,
+    getUsers: getUsers,
+    deleteUser: deleteUser
 }

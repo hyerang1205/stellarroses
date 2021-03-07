@@ -84,15 +84,35 @@ pool.connect(err => {
   //   "INSERT INTO sealevel (id, multiplier, current_year) VALUES (1, 3.3, 2020);",
   //   callback
   // );
-  //   await client.query(
-  //   "INSERT INTO users (username, password) VALUES ('test','test123');",
+  // await client.query(
+  //   "CREATE TABLE items(id SERIAL, title VARCHAR(40) NOT NULL, description TEXT NOT NULL, points INT, PRIMARY KEY(id));",
   //   callback
   // );
-  // await client.query("SELECT id, multiplier FROM sealevel;", callback);
+  //   await client.query(
+  //   "INSERT INTO items(title, description, points) VALUES ('Youtube Team Viewing', 'View a Youtube Video with a minimum of 4 team members', 5);",
+  //   callback
+  // );
   // await client.query(
-  //     "SELECT * FROM users",
+  //     "CREATE TABLE IF NOT EXISTS user_images(image TEXT NOT NULL, id INT, CONSTRAINT id FOREIGN KEY(id) REFERENCES users(id));",
   //     callback
   //   );
+    // await client.query(
+    //     "INSERT INTO user_images(image, id) VALUES ('placeholdertext', 639035092984702737);",
+    //     callback
+    //   );
+//   await client.query("SELECT id, multiplier FROM sealevel;", callback);
+//   await client.query(
+//       "SELECT * FROM users",
+//       callback
+//     );
+//     await client.query(
+//       "SELECT * FROM items",
+//       callback
+//     );
+//     await client.query(
+//       "SELECT * FROM user_images",
+//       callback
+//     );
 // }
 
 // async function transferFunds(client, callback) {
@@ -152,6 +172,6 @@ pool.connect(err => {
 //   console.log("Transferring funds...");
 //   await retryTxn(0, 15, client, transferFunds, cb);
 
-// //   // Exit program
+// // //   // Exit program
 //   process.exit();
 // })().catch((err) => console.log(err.stack));

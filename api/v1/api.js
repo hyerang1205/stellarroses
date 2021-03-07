@@ -5,8 +5,11 @@ const bodyParser = require('body-parser');
 let cors = require('cors');
 require('dotenv').config();
 const api = express.Router();
-let loginController = require('./controller/loginController');
+const loginController = require('./controller/loginController');
 const seaController = require('./controller/seaLevelController');
+const itemsController = require('./controller/itemsController');
+const cityController = require('./controller/cityController');
+const imageController = require('./controller/imageController');
 
 api.use(bodyParser.urlencoded({
     extended: false
@@ -25,5 +28,20 @@ api.get('/', (req, res) => res
 api.get('/sealevel/:id', seaController.getUserLevels);
 api.post('/login', loginController.authUser);
 api.post('/register', loginController.register);
+//Internal use
+api.get('/users', loginController.getUsers);
 
+api.get('/items', itemsController.getItems);
+api.post('/addItem', itemsController.addItem);
+// api.delete('/delte', loginController.delteUser);
+
+api.get('/scores/:city', cityController.searchCity);
+
+api.post('/scores/:city', cityController.createCity);
+
+api.put('/scores/:city', cityController.updateCityScore);
+
+api.post('/images/:id', imageController.createImage);
+
+api.get('/images/:id', imageController.getImages);
 module.exports = api;
