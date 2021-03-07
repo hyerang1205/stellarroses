@@ -24,6 +24,7 @@ function init() {
     //renders the whole scene to make it viewable
     renderer = new THREE.WebGLRenderer({
         antialias: true,
+        alpha: true
     });
     //setting the pixel size for the render
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -52,7 +53,7 @@ function init() {
     controls.target.set(0, 0, -4);
     //set the scene!
     scene = new THREE.Scene();
-    scene.background = new THREE.Color("#000000");
+    // scene.background = new THREE.Color("#000000");
     const light = new THREE.AmbientLight(0xffffff); // soft white light
     scene.add(light);
 
@@ -81,11 +82,36 @@ function onWindowResize() {
 function addGlobeSphere() {
     let length = 200;
     const geometry = new THREE.SphereGeometry(50, length, length);
-    const material = new THREE.MeshPhongMaterial({
-        color: 0x360ccc, // red (can also use a CSS color string here)
-        flatShading: true,
-        shininess: 2,
-    });
+    var material = new THREE.ShaderMaterial({
+        uniforms: {
+          color1: {
+            value: new THREE.Color("darkgreen")
+          },
+          color2: {
+            value: new THREE.Color("darkblue")
+          }
+        },
+        vertexShader: `
+          varying vec2 vUv;
+      
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 color1;
+          uniform vec3 color2;
+        
+          varying vec2 vUv;
+          
+          void main() {
+            
+            gl_FragColor = vec4(mix(color1, color2, vUv.y), 1.0);
+          }
+        `,
+        wireframe: true
+      });
     const sphere = new THREE.Mesh(geometry, material);
     scene.add(sphere);
 
@@ -97,7 +123,7 @@ function addGlobeSphere() {
 }
 function addGlobe() {
     let globescale = 50;
-    geometry = new THREE.Geometry(); /*	NO ONE SAID ANYTHING ABOUT MATH! UGH!	*/
+    geometry = new THREE.Geometry(); /* NO ONE SAID ANYTHING ABOUT MATH! UGH!   */
     let size = globescale * 0.005;
     let upperLimit = 90;
     particleCount = 100; /* Leagues under the sea */
@@ -120,6 +146,7 @@ function addGlobe() {
     particles = new THREE.PointCloud(geometry, materials);
     scene.add(particles);
 }
+
 addGlobeSphere();
 addGlobe();
 
