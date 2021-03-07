@@ -86,7 +86,7 @@ generateCard = (title, description, points, id) => {
     cardText.appendChild(displayDesc);
     cardText.appendChild(displayPoints);
     cardText.appendChild(linebreak);
-    if (localStorage.getItem('token')!==null){ 
+    if (localStorage.getItem('token') !== null) {
         // cardText.appendChild(tocomplete);
         cardText.innerHTML += '<button class="btn btn-secondary btn-sm mr-1 mb-2" data-toggle="modal" data-target="#completeModal" id=>Challenge</button>';
     }
@@ -107,18 +107,15 @@ console.log(localStorage);
 getDbItems();
 
 $(document).ready(function () {
-    if (localStorage.getItem('token')!== null)
-    {
+    if (localStorage.getItem('token') !== null) {
         $('#logstate').html('<a class="nav-link align-items-center d-flex" href="./index.html"><i id="login-navbar" class="fa fa-fw fa-2x mr-2"></i> LOGOUT</a>');
         $("#logstate").click(() => {
-            if (localStorage.getItem('token')){
+            if (localStorage.getItem('token')) {
                 localStorage.removeItem('token');
             }
-            
+
         });
-    }
-    else
-    {
+    } else {
         $('#logstate').html('<a class="nav-link align-items-center d-flex" data-toggle="modal" data-target="#loginModal" href="#"><i id="login-navbar" class="fa fa-fw fa-2x mr-2"></i> LOGIN</a>');
     }
 
@@ -156,39 +153,91 @@ $(document).ready(function () {
                 location.href = "./index.html";
                 console.log(localStorage);
             }).
-            catch(e => alert(e));
-        
+        catch(e => alert(e));
+
+    });
+    $("#image_submit").click(() => {
+        fetch('http://localhost:3000/v1/images/' + localStorage.getItem('id'), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'CrossDomain': true
+            },
+            body: JSON.stringify({
+
+                image: document.getElementById('output').src
+            }),
+        }).
+        then(res => {
+                console.log(res.json);
+                if (res.status == 200) {
+                    let addPoint = document.createElement("button");
+                    addPoint.className = "btn btn-secondary btn-sm mr-1 mb-2"
+                    addPoint.innerHTML = "Add Points to Team";
+                    addPoint.id = "addPoints";
+                    addPoint.addEventListener("click", eventAction = () => {
+                        fetch('http://localhost:3000/v1/Scores/' + 'New York', {
+                            method: 'PUT',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'CrossDomain': true
+                            },
+                            body: JSON.stringify({
+                                points: 5
+                            }),
+                        }).
+                        then(res => {
+                                console.log(res.json);
+                                if (res.status == 200) {
+                                    alert(res.json);
+                                } else if (res.status == 404) {
+                                    throw new Error('City not in database.');
+                                } else {
+                                    console.log(res.json);
+                                }
+                            })
+                            .then(data => {
+                                window.location.href = "./leaderboard.html";
+                            }).
+                        catch(e => {
+                            window.location.href = "./leaderboard.html";
+                        });
+                    });
+                    var output = document.getElementById('createButton');
+                    output.appendChild(addPoint);
+                    
+                } else if (res.status == 404) {
+                    throw new Error('User not in database.');
+                } else {
+                    console.log(res.json);
+                }
+            })
+            .then(data => {
+                $('#item_submit').className = 'data-toggle="popover" title="Query Submitted" data-content="' + data + '"';
+            }).
+        catch(e => {
+            alert(e);
+        });
+    });
+
+    $("#addPoint").click(() => {
+        alert('clicked');
+
     });
 })
 
-$("#item_submit").click(() => {
-    fetch('http://localhost:3000/v1/images/' + localStorage.getItem(username), {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'CrossDomain': true
-        },
-        body: JSON.stringify({
-            image: document.getElementById('edit_output').src
-        }),
-    }).
-    then(res => {
-            console.log(res.json);
-            if (res.status == 200) {
-                console.log("Item Added");
-                location.reload();
-
-            } else if (res.status == 404) {
-                throw new Error('User not in database.');
-            } else {
-                console.log(res.json);
-            }
-        })
-        .then(data => {
-            $('#item_submit').className = 'data-toggle="popover" title="Query Submitted" data-content="' + data + '"';
-        }).
-    catch(e => {
-        alert(e);
-    });
-});
+/**
+ * When images are opened/loaded into the html form, it is converted to a data uri.
+ */
+var openFile = function (event) {
+    var input = event.target;
+    var reader = new FileReader();
+    reader.onload = function () {
+        var dataURL = reader.result;
+        var output = document.getElementById('output');
+        output.src = dataURL;
+    };
+    reader.readAsDataURL(input.files[0]);
+};

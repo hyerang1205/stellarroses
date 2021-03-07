@@ -41,16 +41,25 @@ searchCity = async (req, res) => {
  * Update City Score
  */
 updateCityScore = async (req, res) => {
+
     let city = req.params.city;
     let points = parseInt(req.body.points);
-    cityModel.updateScore(city, points).then((data) => {
-        res.status(200).json('Score Edited To ' +points );
-    }).catch(err => res.status(500).json({
-        message: "Internal Server Error: " + err.message
+    cityModel.getScore(city).then((data) => {
+        if (data.rowCount == 1) {
+            let newPoints = parseInt(data.rows[0].points) + points;
+            cityModel.updateScore(city, newPoints).then((data) => {
+                res.status(200).json('Score Edited To ' + newPoints);
+            })
+        } else {
+            res.status(404).json('City Not Found');
+        }
+    }).catch(e => res.status(500).json({
+        message: 'Error 500 Internal Server Error: ' + e.message
     }));
+
 }
 
-getLeaderBoard =async (req, res) => {
+getLeaderBoard = async (req, res) => {
     cityModel.getSortedScores().then((data) => {
         if (data.rowCount == 0) {
             res.status(404).json('Scores Not Found');
@@ -62,7 +71,7 @@ getLeaderBoard =async (req, res) => {
     }));
 }
 
-module.exports= {
+module.exports = {
     updateCityScore,
     searchCity,
     createCity,
