@@ -11,22 +11,74 @@
                 background:#000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
                 z-index:0;
             }
+
+            div.sliderContainer {
+                width: 70%;
+                text-align: center;
+                margin-left: 15%;
+                position: absolute;
+            }
+
+            #slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 18px !important;
+            width: 100%;
+            border-radius: 10em;
+            background-color: #63c47b;
+            outline: none;
+            }
+
+            #slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #2d8b44;
+            cursor: pointer;
+            border: 3px solid #f4f4f4;
+            }
+
+
+            #slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: #4dbb68;
+            cursor: pointer;
+            border: 3px solid #f4f4f4;
+            }
+
+            #output {
+            color: #d3d3d3;
+            font-family: Lato, sans-serif;
+            letter-spacing: 1.5px;
+            font-size: 20px;
+            margin-left: 5px;
+            }
+
         </style>
     </head>
     <body>
         <div>
             <button id="water">ON WATER</button>
             <button id="where">WHERE AM I</button>
-        </div>
-        <script src="js/locationOcean.js"></script>
 
+        </div>
+        <div class="sliderContainer">
+            <input type="range" value="2020" step="10" min="2020" max="2220" id="slider">
+            <span id="output"></span>
+           </div>
+        
+        <div id="canvas"></div>
+        <script src="js/locationOcean.js"></script>
         <script src="js/three.js"></script>
         <script src="js/controls/TrackballControls.js"></script>
         <script src="js/utils/BufferGeometryUtils.js"></script>
         <script src="js/libs/stats.min.js"></script>
         <script src="js/libs/dat.gui.min.js"></script>
         <script src="js/renderers/Projector.js"></script>
-
         <script src="js/script.js"></script>
     </body>
 </html>
