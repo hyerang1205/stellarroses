@@ -12,11 +12,11 @@
                 z-index:0;
             }
 
-            div.sliderContainer {
+            #sliderContainer {
                 width: 70%;
                 text-align: center;
                 margin-left: 15%;
-                position: absolute;
+
             }
 
             #slider {
@@ -58,6 +58,11 @@
             margin-left: 5px;
             }
 
+            canvas{
+                width: 60%;
+                height: 40%;
+            }
+
         </style>
     </head>
     <body>
@@ -66,12 +71,14 @@
             <button id="where">WHERE AM I</button>
 
         </div>
-        <div class="sliderContainer">
+        
+        <div id="canvas"></div>
+
+        <div id="sliderContainer">
             <input type="range" value="2020" step="10" min="2020" max="2220" id="slider">
             <span id="output"></span>
            </div>
-        
-        <div id="canvas"></div>
+
         <script src="js/locationOcean.js"></script>
         <script src="js/three.js"></script>
         <script src="js/controls/TrackballControls.js"></script>

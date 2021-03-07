@@ -24,19 +24,18 @@ function init() {
     //renders the whole scene to make it viewable
     renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: true
     });
     //setting the pixel size for the render
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     //appending the render  to the container
-    document.getElementById('canvas').appendChild(renderer.domElement);
+    document.body.appendChild(renderer.domElement);
     // Create camera.
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 2000);
     camera.position.z = 230;
     //trackball controllers
     //allows camera movement using mouse!!!
-    controls = new THREE.TrackballControls(camera);
+    controls = new THREE.TrackballControls(camera, renderer.domElement);
     controls.addEventListener("change", render);
     controls.rotateSpeed = 2.0;
     //how far you can zoom out
@@ -53,7 +52,7 @@ function init() {
     controls.target.set(0, 0, -4);
     //set the scene!
     scene = new THREE.Scene();
-    // scene.background = new THREE.Color("#000000");
+    scene.background = new THREE.Color("#000000");
     const light = new THREE.AmbientLight(0xffffff); // soft white light
     scene.add(light);
 
@@ -77,41 +76,17 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     controls.handleResize();
 }
+
 //STELLLAA right HERE!!! this is the code and you need to check the material!! inside addGlobeSphere!!
 //please make the material make the globe look shiny and like the one on github.com when you are not logged in
 function addGlobeSphere() {
     let length = 200;
     const geometry = new THREE.SphereGeometry(50, length, length);
-    var material = new THREE.ShaderMaterial({
-        uniforms: {
-          color1: {
-            value: new THREE.Color("darkgreen")
-          },
-          color2: {
-            value: new THREE.Color("darkblue")
-          }
-        },
-        vertexShader: `
-          varying vec2 vUv;
-      
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-          }
-        `,
-        fragmentShader: `
-          uniform vec3 color1;
-          uniform vec3 color2;
-        
-          varying vec2 vUv;
-          
-          void main() {
-            
-            gl_FragColor = vec4(mix(color1, color2, vUv.y), 1.0);
-          }
-        `,
-        wireframe: true
-      });
+    const material = new THREE.MeshPhongMaterial({
+        color: 0x360ccc, // red (can also use a CSS color string here)
+        flatShading: true,
+        shininess: 2,
+    });
     const sphere = new THREE.Mesh(geometry, material);
     scene.add(sphere);
 
@@ -121,11 +96,24 @@ function addGlobeSphere() {
     // var cube1 = new THREE.Mesh(geometry1, material1);
     // scene.add(cube1);
 }
-function addGlobe() {
+let returnVertex = async (x, y) => {
+    let coord = latLngToVector3({ lat: x, lng: y });
+    let isLand = await onWater(coord.x, coord.y);
+    isLand = !isLand;
+    console.log("[returnVertex]" + isLand);
+    if (isLand) {
+        var vertex = new THREE.Vector3();
+        vertex.x = coord.x * globescale;
+        vertex.y = coord.y * globescale;
+        vertex.z = coord.z * globescale;
+        return vertex;
+    }
+};
+function addGlobePoints() {
     let globescale = 50;
-    geometry = new THREE.Geometry(); /* NO ONE SAID ANYTHING ABOUT MATH! UGH!   */
+    geometry = new THREE.Geometry(); /*	NO ONE SAID ANYTHING ABOUT MATH! UGH!	*/
     let size = globescale * 0.005;
-    let upperLimit = 90;
+    let upperLimit = -87;
     particleCount = 100; /* Leagues under the sea */
     materials = new THREE.PointCloudMaterial({
         size: size,
@@ -133,14 +121,10 @@ function addGlobe() {
     });
     for (let i = -90; i < upperLimit; i++) {
         for (let j = -180; j <= upperLimit * 2; j++) {
-            let coord = latLngToVector3({ lat: i, lng: j });
-
-            var vertex = new THREE.Vector3();
-            vertex.x = coord.x * globescale;
-            vertex.y = coord.y * globescale;
-            vertex.z = coord.z * globescale;
-            // console.log("112" + coord.x * 100.0);
-            geometry.vertices.push(vertex);
+            let vertex = returnVertex(i, j);
+            if (vertex) {
+                geometry.vertices.push(vertex);
+            }
         }
     }
     particles = new THREE.PointCloud(geometry, materials);
@@ -148,7 +132,15 @@ function addGlobe() {
 }
 
 addGlobeSphere();
-addGlobe();
+addGlobePoints();
+
+var slider = document.getElementById("slider");
+var output = document.getElementById("output");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
 
 // for (let i = 0; i < 10; i++) {
 //     for (let j = 0; j < 10; j++) {
@@ -180,17 +172,14 @@ async function getWaterr(lat, lng) {
         console.log("fetch failed", err);
     }
 }
-let hi = async (lat, lng) => {
-    let hanna = await onWater(10, 10);
-    console.log(hanna.water + "hates sushi");
-};
+//returns the vertex of dot if it is a country
 
-hi();
-
-var slider = document.getElementById("slider");
-var output = document.getElementById("output");
-output.innerHTML = slider.value;
-
-slider.oninput = function() {
-  output.innerHTML = this.value;
-}
+setTimeout(50);
+var slider = document.createElement('input');
+    slider.id = "slider";
+    slider.type = 'range';
+    slider.min = 2020;
+    slider.max = 2220;
+    slider.value = 2020;
+    slider.step = 10;
+    document.getElementById("sliderContainer").prependChild(slider);
