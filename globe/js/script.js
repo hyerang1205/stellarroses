@@ -1,6 +1,7 @@
 var scene, camera, renderer, controls, projector, geometry, dope;
 var humanTurn = 1;
 var rad = 100;
+
 var mouse = new THREE.Vector2(),
     INTERSECTED;
 
@@ -11,6 +12,12 @@ function addAxis() {
 }
 init();
 animationLoop();
+latLngToVector3 = (latLng, radius) => {
+    const phi = Math.PI * (0.5 - latLng.lat / 180);
+    const theta = Math.PI * (latLng.lng / 180);
+    const spherical = THREE.Spherical(radius || latLng.radius || 1, phi, theta);
+    return new THREE.Vector3().setFromSpherical(spherical);
+};
 //addAxis();
 //window resizeBy
 function init() {
@@ -72,80 +79,48 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     controls.handleResize();
 }
-
+function addGlobeSphere() {
+    const geometry = new THREE.SphereGeometry(5, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+}
 function addGlobe() {
     let materials = new THREE.PointsMaterial({
         color: 0x000000,
         size: 2,
         opacity: 1,
     });
-    // let geometry = new THREE.Geometry(); /*	NO ONE SAID ANYTHING ABOUT MATH! UGH!	*/
 
-    // for (let i = -90; i < 0; i += 2) {
-    //     for (let j = -180; j < 0; j += 2) {
-    //         let coord = llarToWorld(i, j, 0);
-
-    //         geometry.vertices.push(new THREE.Vector3(coord.x, coord.y, coord.z));
-    //     }
-    // }
-    // tgeometry.computeVertexNormals();
-    // scene.add(pointCloud);
     geometry = new THREE.Geometry(); /*	NO ONE SAID ANYTHING ABOUT MATH! UGH!	*/
-
+    let size = 0.5;
     particleCount = 100; /* Leagues under the sea */
-
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j <= 10; j++) {
-            let coord = llarToWorld(i, j, 0);
+    materials = new THREE.PointCloudMaterial({
+        size: size,
+        color: 0xff0000,
+    });
+    for (let i = -90; i < 90; i++) {
+        for (let j = -180; j <= 180; j++) {
+            let coord = latLngToVector3({ lat: i, lng: j });
 
             var vertex = new THREE.Vector3();
-            vertex.x = coord.X;
-            vertex.y = coord.Y;
-            vertex.z = coord.Z;
-
+            vertex.x = coord.x * 100.0;
+            vertex.y = coord.y * 100.0;
+            vertex.z = coord.z * 100.0;
+            console.log("112" + coord.x * 100.0);
             geometry.vertices.push(vertex);
         }
     }
-
-    /*	We can't stop here, this is bat country!	*/
-
-    parameters = [
-        [[1, 1, 0.5], 5],
-        [[0.95, 1, 0.5], 4],
-        [[0.9, 1, 0.5], 3],
-        [[0.85, 1, 0.5], 2],
-        [[0.8, 1, 0.5], 1],
-    ];
-    parameterCount = parameters.length;
-
-    /*	I told you to take those motion sickness pills.
-Clean that vommit up, we're going again!	*/
-
-    for (i = 0; i < parameterCount; i++) {
-        color = parameters[i][0];
-        size = 0.5;
-
-        materials[i] = new THREE.PointCloudMaterial({
-            size: size,
-        });
-
-        particles = new THREE.PointCloud(geometry, materials[i]);
-
-        scene.add(particles);
-    }
+    particles = new THREE.PointCloud(geometry, materials);
+    scene.add(particles);
 }
+addGlobeSphere();
 addGlobe();
 
-//
-//longitute lattitude to coordinates in space
-
-function llarToWorld(lat, lon, alt) {
-    //# see: http://www.mathworks.de/help/toolbox/aeroblks/llatoecefposition.html
-    let f = 0;
-    let ls = Math.atan((1 - f) ** 2 * Math.tan(lat));
-    x = rad * Math.cos(ls) * Math.cos(lon) + alt * Math.cos(lat) * Math.cos(lon);
-    y = rad * Math.cos(ls) * Math.sin(lon) + alt * Math.cos(lat) * Math.sin(lon);
-    z = rad * Math.sin(ls) + alt * Math.sin(lat);
-
-    return { X: x, Y: y, Z: z };
+for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+        console.log("\t00000lat " + i + "\tlong" + j + "\t");
+        let vector = latLngToVector3({ lat: i, lng: j });
+        console.log("x:" + vector.x + "y:" + vector.y + "   \tz:" + vector.z);
+    }
 }
