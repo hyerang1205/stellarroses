@@ -4,7 +4,7 @@ require('dotenv').config('../../env');
 const fs = require('fs');
 const { Pool } = require("pg");
 
-console.log(process.env);
+
 // Configure the database connection.
 const config = {
   user: process.env.db_user,
@@ -77,14 +77,22 @@ pool.connect(err => {
 //     callback
 //   );
 //   await client.query(
-//     "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY, multiplier NUMERIC NOT NULL, current_year INT);",
+//     "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, username VARCHAR(40) NOT NULL, password VARCHAR(40) NOT NULL, location VARCHAR(40) DEFAULT 'Vancouver', points INT DEFAULT 0);",
 //     callback
 //   );
-//   await client.query(
-//     "INSERT INTO sealevel (id, multiplier, current_year) VALUES (1, 3.3, 2020);",
-//     callback
-//   );
-//   await client.query("SELECT id, multiplier FROM sealevel;", callback);
+  // await client.query(
+  //   "INSERT INTO sealevel (id, multiplier, current_year) VALUES (1, 3.3, 2020);",
+  //   callback
+  // );
+  //   await client.query(
+  //   "INSERT INTO users (username, password) VALUES ('test','test123');",
+  //   callback
+  // );
+  // await client.query("SELECT id, multiplier FROM sealevel;", callback);
+  // await client.query(
+  //     "SELECT * FROM users",
+  //     callback
+  //   );
 // }
 
 // async function transferFunds(client, callback) {
@@ -136,13 +144,13 @@ pool.connect(err => {
 //     }
 //   }
 
-//   // Initialize table in transaction retry wrapper
-//   console.log("Initializing table...");
-//   await retryTxn(0, 15, client, initTable, cb);
+  // Initialize table in transaction retry wrapper
+  // console.log("Initializing table...");
+  // await retryTxn(0, 15, client, initTable, cb);
 
-// //   // Transfer funds in transaction retry wrapper
-// //   console.log("Transferring funds...");
-// //   await retryTxn(0, 15, client, transferFunds, cb);
+//   // Transfer funds in transaction retry wrapper
+//   console.log("Transferring funds...");
+//   await retryTxn(0, 15, client, transferFunds, cb);
 
 // //   // Exit program
 //   process.exit();
