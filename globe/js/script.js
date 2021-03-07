@@ -39,9 +39,9 @@ function init() {
     controls.addEventListener("change", render);
     controls.rotateSpeed = 2.0;
     //how far you can zoom out
-    controls.maxDistance = 240;
+    controls.maxDistance = 110;
     //how far you zoom in
-    controls.minDistance = 0;
+    controls.minDistance = 110;
     //controls the slipperiness after moving controllers
     controls.dynamicDampingFactor = 0.2;
     controls.staticMoving = false;
@@ -53,12 +53,9 @@ function init() {
     //set the scene!
     scene = new THREE.Scene();
     scene.background = new THREE.Color("#000000");
-    var light = new THREE.HemisphereLight(0x111111, 0x444444, 1);
+    const light = new THREE.AmbientLight(0xffffff); // soft white light
     scene.add(light);
-    fogHex = 0x000000; /* As black as your heart.	*/
 
-    fogDensity = 0.0007; /* So not terribly dense?	*/
-    scene.fog = new THREE.FogExp2(fogHex, fogDensity);
     // Add listener for window resize.
     window.addEventListener("resize", onWindowResize, false);
 }
@@ -80,33 +77,39 @@ function onWindowResize() {
     controls.handleResize();
 }
 function addGlobeSphere() {
-    const geometry = new THREE.SphereGeometry(5, 32, 32);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    let length = 200;
+    const geometry = new THREE.SphereGeometry(50, length, length);
+    const material = new THREE.MeshPhongMaterial({
+        color: 0x360ccc, // red (can also use a CSS color string here)
+        flatShading: true,
+        shininess: 2,
+    });
     const sphere = new THREE.Mesh(geometry, material);
     scene.add(sphere);
+
+    // var geometry1 = new THREE.SphereGeometry(50, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+    // var material1 = new THREE.MeshNormalMaterial();
+    // var cube1 = new THREE.Mesh(geometry1, material1);
+    // scene.add(cube1);
 }
 function addGlobe() {
-    let materials = new THREE.PointsMaterial({
-        color: 0x000000,
-        size: 2,
-        opacity: 1,
-    });
-
+    let globescale = 50;
     geometry = new THREE.Geometry(); /*	NO ONE SAID ANYTHING ABOUT MATH! UGH!	*/
-    let size = 0.5;
+    let size = globescale * 0.005;
+    let upperLimit = 90;
     particleCount = 100; /* Leagues under the sea */
     materials = new THREE.PointCloudMaterial({
         size: size,
-        color: 0xff0000,
+        color: 0x000000,
     });
-    for (let i = -90; i < 90; i++) {
-        for (let j = -180; j <= 180; j++) {
+    for (let i = -90; i < upperLimit; i++) {
+        for (let j = -180; j <= upperLimit * 2; j++) {
             let coord = latLngToVector3({ lat: i, lng: j });
 
             var vertex = new THREE.Vector3();
-            vertex.x = coord.x * 100.0;
-            vertex.y = coord.y * 100.0;
-            vertex.z = coord.z * 100.0;
+            vertex.x = coord.x * globescale;
+            vertex.y = coord.y * globescale;
+            vertex.z = coord.z * globescale;
             // console.log("112" + coord.x * 100.0);
             geometry.vertices.push(vertex);
         }
@@ -117,10 +120,23 @@ function addGlobe() {
 addGlobeSphere();
 addGlobe();
 
-for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-        // console.log("\t00000lat " + i + "\tlong" + j + "\t");
-        let vector = latLngToVector3({ lat: i, lng: j });
-        // console.log("x:" + vector.x + "y:" + vector.y + "   \tz:" + vector.z);
-    }
+// for (let i = 0; i < 10; i++) {
+//     for (let j = 0; j < 10; j++) {
+//         console.log("\t00000lat " + i + "\tlong" + j + "\t");
+//         let vector = latLngToVector3({ lat: i, lng: j });
+//         console.log("x:" + vector.x + "y:" + vector.y + "   \tz:" + vector.z);
+//     }
+// }
+
+function onWater(lat, lng) {
+    fetch(`https://api.onwater.io/api/v1/results/${lat},${lng}?access_token=Mz4yZsaQizXfoL-xc56s`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data.water);
+            return { water: data.water };
+        });
 }
+
+onWater(10, 10).then(function (result) {
+    console.log(result.water + "hannah chung hates sushi");
+});
