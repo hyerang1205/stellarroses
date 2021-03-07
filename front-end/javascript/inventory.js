@@ -318,7 +318,7 @@ $(document).ready(function () {
 
     $("#edit_submit").click(() => {
         // alert(document.getElementById('edit_output').src);
-        fetch('https://shopify-challenge-db.herokuapp.com/v1/items', {
+        fetch('http://localhost:3000/v1/images/', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -326,15 +326,7 @@ $(document).ready(function () {
 
             },
             body: JSON.stringify({
-                item_name: document.getElementById('edit_item').value,
-                item_category: document.getElementById('edit_category').value,
-                quantity: document.getElementById('edit_quantity').value,
-                price: document.getElementById('edit_price').value,
-                discount: document.getElementById('edit_discount').value,
-                private: document.getElementById('edit_private').value,
-                user_id: localStorage.getItem('session'),
-                image: document.getElementById('edit_output').src,
-                img_id: localStorage.getItem('imgID')
+                image: document.getElementById('edit_output').src
             }),
         }).
         then(res => {

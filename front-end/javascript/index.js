@@ -77,7 +77,7 @@ generateCard = (title, description, points, id) => {
 
     let tocomplete = document.createElement("button");
     tocomplete.className = "btn btn-secondary btn-sm mr-1 mb-2"
-    tocomplete.innerHTML = "To Complete";
+    tocomplete.innerHTML = "Challenge";
     tocomplete.onclick = (() => {
         console.log("hello");
     });
@@ -88,7 +88,7 @@ generateCard = (title, description, points, id) => {
     cardText.appendChild(linebreak);
     if (localStorage.getItem('token')!==null){ 
         // cardText.appendChild(tocomplete);
-        cardText.innerHTML += '<button class="btn btn-secondary btn-sm mr-1 mb-2" data-toggle="modal" data-target="#completeModal" id=>To Complete</button>';
+        cardText.innerHTML += '<button class="btn btn-secondary btn-sm mr-1 mb-2" data-toggle="modal" data-target="#completeModal" id=>Challenge</button>';
     }
     cardObject.appendChild(overlayDiv);
     cardObject.appendChild(cardText);
@@ -148,6 +148,7 @@ $(document).ready(function () {
             })
             .then(data => {
                 console.log(data);
+                localStorage.setItem('id', data.id);
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', data.username);
                 localStorage.setItem('location', data.location);
@@ -158,6 +159,36 @@ $(document).ready(function () {
             catch(e => alert(e));
         
     });
-
- 
 })
+
+$("#item_submit").click(() => {
+    fetch('http://localhost:3000/v1/images/' + localStorage.getItem(username), {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'CrossDomain': true
+        },
+        body: JSON.stringify({
+            image: document.getElementById('edit_output').src
+        }),
+    }).
+    then(res => {
+            console.log(res.json);
+            if (res.status == 200) {
+                console.log("Item Added");
+                location.reload();
+
+            } else if (res.status == 404) {
+                throw new Error('User not in database.');
+            } else {
+                console.log(res.json);
+            }
+        })
+        .then(data => {
+            $('#item_submit').className = 'data-toggle="popover" title="Query Submitted" data-content="' + data + '"';
+        }).
+    catch(e => {
+        alert(e);
+    });
+});
