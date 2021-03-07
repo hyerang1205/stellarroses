@@ -61,7 +61,7 @@ getDbItems = () => {
                 if (i % 2 == 0) {
                     let spacing = document.createElement("div");
                     spacing.className = "w-100";
-                    document.getElementById("inventory").appendChild(spacing);
+                    document.getElementById("board").appendChild(spacing);
                 }
                 generateCard(data[i].title, data[i].description, data[i].points);
             }
@@ -157,10 +157,10 @@ generateCard = (title, description, points) => {
     //     overlayDiv.appendChild(saleOverlay);
     // }
     // cardText.appendChild(addToCart);
-    cardObject.appendChild(overlayDiv);
+    cardObject.appendChild(overlayDiv);board
     cardObject.appendChild(cardText);
     column.appendChild(cardObject);
-    document.getElementById("inventory").appendChild(column);
+    document.getElementById("board").appendChild(column);
 }
 
 /**

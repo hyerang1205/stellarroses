@@ -15,11 +15,13 @@
 }
 
 body{
-    
-    background-color: rgba(197, 216, 209,0.8);
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
+    background-image: url("https://i.imgur.com/KTzPh0L.gif?noredirect");
 }
 .opaqueBox{
-    background-color: rgba(244, 237, 234,0.8);
+    background-color: rgba(230, 235, 248, 0.35);
 }
 
 
