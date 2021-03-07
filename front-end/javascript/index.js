@@ -86,7 +86,7 @@ generateCard = (title, description, points, id) => {
     cardText.appendChild(displayDesc);
     cardText.appendChild(displayPoints);
     cardText.appendChild(linebreak);
-    if (localStorage.getItem('token')!='null'){ 
+    if (localStorage.getItem('token')!==null){ 
         // cardText.appendChild(tocomplete);
         cardText.innerHTML += '<button class="btn btn-secondary btn-sm mr-1 mb-2" data-toggle="modal" data-target="#completeModal" id=>To Complete</button>';
     }
@@ -107,16 +107,19 @@ console.log(localStorage);
 getDbItems();
 
 $(document).ready(function () {
-    if (localStorage.getItem('token')=='null'){
-        $('#logstate').html('<a class="nav-link align-items-center d-flex" data-toggle="modal" data-target="#loginModal" href="#"><i id="login-navbar" class="fa fa-fw fa-2x mr-2"></i> LOGIN</a>');
-    }
-    else{
+    if (localStorage.getItem('token')!== null)
+    {
         $('#logstate').html('<a class="nav-link align-items-center d-flex" href="./index.html"><i id="login-navbar" class="fa fa-fw fa-2x mr-2"></i> LOGOUT</a>');
         $("#logstate").click(() => {
             if (localStorage.getItem('token')){
                 localStorage.setItem('token', null);
             }
+            
         });
+    }
+    else
+    {
+        $('#logstate').html('<a class="nav-link align-items-center d-flex" data-toggle="modal" data-target="#loginModal" href="#"><i id="login-navbar" class="fa fa-fw fa-2x mr-2"></i> LOGIN</a>');
     }
 
     $("#login_submit").click(() => {
